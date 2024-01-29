@@ -1,6 +1,7 @@
 class MeccasController < ApplicationController
 before_action :jwt_authenticate, only: [:create, :update]
 
+  # 聖地の一覧表示
   def create
     mecca = Mecca.create(mecca_params)
     if mecca.valid?
@@ -10,6 +11,7 @@ before_action :jwt_authenticate, only: [:create, :update]
     end
   end
 
+  #  聖地の詳細表示
   def show
     mecca_params_id = params.permit(:id)
     mecca = Mecca.find(mecca_params_id[:id])
@@ -20,6 +22,7 @@ before_action :jwt_authenticate, only: [:create, :update]
     end
   end
 
+  # 聖地を都道府県からの検索
   def prefecture
     mecca_params = params.permit(:prefecture)
     meccas = Mecca.where(prefecture: mecca_params[:prefecture])
@@ -30,6 +33,7 @@ before_action :jwt_authenticate, only: [:create, :update]
     end
   end
 
+  # 聖地の編集
   def update
     mecca_params_id = params.permit(:id)
     mecca = Mecca.find(mecca_params_id[:id])
@@ -39,6 +43,7 @@ before_action :jwt_authenticate, only: [:create, :update]
       render json: mecca.errors, status: :unprocessable_entity
     end
   end
+  
   private
 
   def mecca_params
