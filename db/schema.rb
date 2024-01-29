@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_25_174155) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_29_081043) do
+  create_table "favorites", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "mecca_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "images", force: :cascade do |t|
+    t.string "path"
+    t.integer "mecca_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "meccas", force: :cascade do |t|
     t.string "mecca_name"
     t.integer "anime_id"
@@ -32,5 +46,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_25_174155) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "favorites", "meccas", on_delete: :cascade
+  add_foreign_key "favorites", "users", on_delete: :cascade
+  add_foreign_key "images", "meccas", on_delete: :cascade
   add_foreign_key "meccas", "users", on_delete: :cascade
 end
