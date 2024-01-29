@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :meccas, only: [:show, :create, :update, :destroy] do
     collection do
       get '/prefecture/:prefecture', to: 'meccas#prefecture'
+      
     end
   end
 end
