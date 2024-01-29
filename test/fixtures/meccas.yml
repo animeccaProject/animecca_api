@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  mecca_name: MyString
+  anime_id: 1
+  title: MyString
+  episode: 1
+  scene: 2024-01-26 02:41:55
+  place_id: 1
+  prefecture: MyString
+  about: MyText
+  user_id: 1
+
+two:
+  mecca_name: MyString
+  anime_id: 1
+  title: MyString
+  episode: 1
+  scene: 2024-01-26 02:41:55
+  place_id: 1
+  prefecture: MyString
+  about: MyText
+  user_id: 1

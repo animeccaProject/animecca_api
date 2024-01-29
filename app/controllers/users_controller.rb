@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  require 'jwt'
+  # require 'jwt'
 
   def create
     user = User.new(user_params)
