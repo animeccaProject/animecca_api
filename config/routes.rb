@@ -4,4 +4,10 @@ Rails.application.routes.draw do
       post '/login', to: 'users#login'
     end
   end
+
+  resources :meccas, only: [:show, :create, :update, :destroy] do
+    collection do
+      get '/prefecture/:prefecture', to: 'meccas#prefecture'
+    end
+  end
 end

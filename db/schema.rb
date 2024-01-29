@@ -10,12 +10,45 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_25_154101) do
-  create_table "users", force: :cascade do |t|
-    t.string "username"
-    t.string "password_digest"
+ActiveRecord::Schema[7.1].define(version: 2024_01_29_084023) do
+  create_table "favorites", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "mecca_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  create_table "images", force: :cascade do |t|
+    t.string "path", null: false
+    t.integer "mecca_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "meccas", force: :cascade do |t|
+    t.string "mecca_name", null: false
+    t.integer "anime_id", null: false
+    t.string "title", null: false
+    t.integer "episode"
+    t.time "scene"
+    t.integer "place_id", null: false
+    t.string "prefecture", null: false
+    t.text "about"
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "username", null: false
+    t.string "password_digest", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["username"], name: "index_users_on_username", unique: true
+  end
+
+  add_foreign_key "favorites", "meccas", on_delete: :cascade
+  add_foreign_key "favorites", "users", on_delete: :cascade
+  add_foreign_key "images", "meccas", on_delete: :cascade
+  add_foreign_key "meccas", "users", on_delete: :cascade
 end
