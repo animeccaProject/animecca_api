@@ -31,7 +31,7 @@ class UsersController < ApplicationController
 
   # jwtのトークン作成
   def jwt_cereate_token(payload)
-    payload = {username: payload[:username]}
+    payload = {user_id: payload[:id]}
     JWT.encode(payload, Rails.application.credentials.secret_key_base)
   end
 end
