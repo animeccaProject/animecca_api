@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  has_many :favorites, dependent: :destroy
+  has_many :meccas, through: :favorites
   validates :username, presence: true, uniqueness: true, length: {minimum:3}
   has_secure_password
   VALID_PASSWORD_REGEX = /\A[\w\-]+\z/
