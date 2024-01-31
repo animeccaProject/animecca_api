@@ -26,3 +26,4 @@ end
 # credentials.yml.encを削除
 # "sudo EDITOR=vim rails credentials:edit"を実行してmaster.keyを作成,保存
 # マスターキーのパミッションを644に変更
+# dockerは再ビルドしてください
