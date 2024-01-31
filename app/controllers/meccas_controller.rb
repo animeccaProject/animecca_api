@@ -3,8 +3,14 @@ before_action :jwt_authenticate, only: [:create, :update]
 
   # 聖地の一覧表示
   def create
-    mecca = Mecca.create(mecca_params)
+    mecca = Mecca.new(mecca_params)
+    mecca.user_id = @user.id
+    # ここにイメージの保存処理を追加
+    # 保存先はpublic/images/[mecca_id]/[image_id].jpg or png
+
+    # -----------------
     if mecca.valid?
+      mecca.save
       render json: mecca
     else
       render json: mecca.errors, status: :unprocessable_entity
