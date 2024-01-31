@@ -3,7 +3,8 @@ class UsersController < ApplicationController
   # userの作成
   def create
     user = User.new(user_params)
-    if user.save
+    if user.valid?
+      user.save
       render json: { user: user }, status: :created
     else
       render json: { user: user }, status: :unprocessable_entity
@@ -13,9 +14,9 @@ class UsersController < ApplicationController
   # userのログイン
   def login
     user = User.find_by(username: user_params[:username])
-    puts user[:username]
+    # userが存在するかつパスワードが正しい場合
     if user && user.authenticate(user_params[:password])
-      render json: {user: user, token: jwt_cereate_token(user) }, status: :ok
+      render json: {token: jwt_cereate_token(user) }, status: :ok
     else
       render json: { error: "Invalid username or password" }, status: :unauthorized
     end
