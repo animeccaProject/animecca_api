@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class ApplicationController < ActionController::API
   require 'jwt'
-  
+
   # jwtの認証
-  
+
   def jwt_authenticate
     auth_header = request.headers['Authorization']
     token = auth_header.split(' ')[1]
@@ -13,12 +15,11 @@ class ApplicationController < ActionController::API
       # 各コントローラーでは@userでログインユーザーが取得できる
       # @userがうまくいかない場合は下記のメモを参照
       @user = User.find(user_id)
-    rescue
+    rescue StandardError
       @user = nil
     end
   end
 end
-
 
 # Dockerを使用してのJWT認証の実装は以下に注意
 # credentials.yml.encのsecret_key_baseがnilになる場合はconfig/master.keyがあるか確認
