@@ -1,13 +1,14 @@
-class UsersController < ApplicationController
+# frozen_string_literal: true
 
+class UsersController < ApplicationController
   # userの作成
   def create
     user = User.new(user_params)
     if user.valid?
       user.save
-      render json: { user: user }, status: :created
+      render json: { user: }, status: :created
     else
-      render json: { user: user }, status: :unprocessable_entity
+      render json: { user: }, status: :unprocessable_entity
     end
   end
 
@@ -15,13 +16,12 @@ class UsersController < ApplicationController
   def login
     user = User.find_by(username: user_params[:username])
     # userが存在するかつパスワードが正しい場合
-    if user && user.authenticate(user_params[:password])
-      render json: {token: jwt_cereate_token(user) }, status: :ok
+    if user&.authenticate(user_params[:password])
+      render json: { user: { username: user[:username], id: user[:id], token: jwt_cereate_token(user) } }, status: :ok
     else
-      render json: { error: "Invalid username or password" }, status: :unauthorized
+      render json: { error: 'パスワードかユーザーネームが間違えています。' }, status: :unauthorized
     end
   end
-
 
   private
 
@@ -32,7 +32,7 @@ class UsersController < ApplicationController
 
   # jwtのトークン作成
   def jwt_cereate_token(payload)
-    payload = {user_id: payload[:id]}
+    payload = { user_id: payload[:id] }
     JWT.encode(payload, Rails.application.credentials.secret_key_base)
   end
 end

@@ -1,5 +1,5 @@
 class Mecca < ApplicationRecord
-  
+
   validates :mecca_name, presence: true
   validates :anime_id, presence: true
   validates :title, presence: true

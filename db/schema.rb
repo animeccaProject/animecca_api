@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_29_084023) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_01_142831) do
   create_table "favorites", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "mecca_id", null: false
@@ -30,7 +30,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_29_084023) do
     t.integer "anime_id", null: false
     t.string "title", null: false
     t.integer "episode"
-    t.time "scene"
+    t.string "scene"
     t.integer "place_id", null: false
     t.string "prefecture", null: false
     t.text "about"
