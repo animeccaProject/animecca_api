@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class MeccasController < ApplicationController
-
   before_action :jwt_authenticate, only: %i[create update]
 
   # 聖地の一覧表示
@@ -15,7 +14,7 @@ class MeccasController < ApplicationController
       if image_data
         begin
           image_store(mecca, image_data)
-        rescue => e
+        rescue StandardError => e
           mecca.errors.add(:image, e.message)
         end
       end
@@ -24,7 +23,7 @@ class MeccasController < ApplicationController
       render json: mecca
     else
       render json: mecca.errors, status: :unprocessable_entity
-
+    end
   end
 
   # 聖地の編集
@@ -63,7 +62,8 @@ class MeccasController < ApplicationController
   private
 
   def mecca_params
-    params.require(:mecca).permit(:mecca_name, :anime_id, :title, :episode, :scene, :place_id, :prefecture, :about, :image)
+    params.require(:mecca).permit(:mecca_name, :anime_id, :title, :episode, :scene, :place_id, :prefecture, :about,
+                                  :image)
   end
 
   def image_params
@@ -76,7 +76,7 @@ class MeccasController < ApplicationController
 
     # 画像の保存パスの設定
     file_path = Rails.root.join('public', 'images', mecca.id.to_s,
-                                "#{image_data.content_type.split('/').last}")
+                                image_data.content_type.split('/').last.to_s)
 
     # 画像の保存
     File.open(file_path, 'wb') do |file|
