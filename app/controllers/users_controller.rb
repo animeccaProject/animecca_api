@@ -19,7 +19,7 @@ class UsersController < ApplicationController
     if user&.authenticate(user_params[:password])
       render json: { user: { username: user[:username], id: user[:id], token: jwt_cereate_token(user) } }, status: :ok
     else
-      render json: { error: 'Invalid username or password' }, status: :unauthorized
+      render json: { error: 'パスワードかユーザーネームが間違えています。' }, status: :unauthorized
     end
   end
 

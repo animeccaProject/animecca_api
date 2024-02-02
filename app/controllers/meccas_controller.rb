@@ -7,30 +7,18 @@ class MeccasController < ApplicationController
   def create
     mecca = Mecca.new(mecca_params)
     mecca.user_id = @user.id
-    # ここにイメージの保存処理を追加
-    # 保存先はpublic/images/[mecca_id]/[image_id].jpg or png
+    if mecca.valid?
 
-    # 画像データの取得
-    image_data = params[:mecca][:image]
-
-    if image_data
-      # 保存先ディレクトリの確認と作成
-      FileUtils.mkdir_p(Rails.root.join('public', 'images', mecca.id.to_s))
-
-      # 画像の保存パスの設定
-      file_path = Rails.root.join('public', 'images', mecca.id.to_s,
-                                  "#{SecureRandom.uuid}.#{image_data.content_type.split('/').last}")
-
-      # 画像の保存
-      File.open(file_path, 'wb') do |file|
-        file.write(image_data.read)
+      # 画像データがあった場合のみ保存処理を行う
+      image_data = image_params[:image]
+      if image_data
+        begin
+          image_store(mecca, image_data)
+        rescue => e
+          mecca.errors.add(:image, e.message)
+        end
       end
 
-      # オプション: 画像パスをデータベースに保存
-      # mecca.image_path = file_path.relative_path_from(Rails.root.join('public'))
-    end
-    # -----------------
-    if mecca.valid?
       mecca.save
       render json: mecca
     else
@@ -96,7 +84,27 @@ class MeccasController < ApplicationController
   private
 
   def mecca_params
-    params.require(:mecca).permit(:mecca_name, :anime_id, :title, :episode, :scene, :place_id, :prefecture, :about,
-                                  :image)
+    params.require(:mecca).permit(:mecca_name, :anime_id, :title, :episode, :scene, :place_id, :prefecture, :about, :image)
+  end
+
+  def image_params
+    params.require(:image).permit(:path)
+  end
+
+  def image_store(mecca, image_data)
+    # 保存先ディレクトリの確認と作成
+    FileUtils.mkdir_p(Rails.root.join('public', 'images', mecca.id.to_s))
+
+    # 画像の保存パスの設定
+    file_path = Rails.root.join('public', 'images', mecca.id.to_s,
+                                "#{image_data.content_type.split('/').last}")
+
+    # 画像の保存
+    File.open(file_path, 'wb') do |file|
+      file.write(image_data.read)
+    end
+
+    # オプション: 画像パスをデータベースに保存
+    mecca.image_path = file_path.relative_path_from(Rails.root.join('public'))
   end
 end
