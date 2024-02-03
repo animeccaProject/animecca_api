@@ -29,7 +29,7 @@ class MeccasController < ApplicationController
   # 聖地新規登録
   def create
     mecca_data = JSON.parse(params[:mecca])
-    mecca = Mecca.new(mecca_data['mecca'])
+    mecca = Mecca.new(mecca_data)
     mecca.user_id = @user.id
   
     if mecca.valid?
@@ -105,7 +105,7 @@ class MeccasController < ApplicationController
 
   # 画像の保存処理
   def image_store(mecca, images)
-    images.each do |image_file|
+    images.each do |key, image_file|
       # 保存先のディレクトリを設定
   
       # 画像の保存処理（例：CarrierWaveを使用）
