@@ -5,7 +5,7 @@ class FavoritesController < ApplicationController
 
   def index
     fovorites = @user.favorites
-    meccas = fovorites.map { |favorite| favorite.mecca }
+    meccas = fovorites.map(&:mecca)
     if fovorites.nil?
       render json: { error: 'お気に入りが見つかりません' }, status: :not_found
       return
@@ -30,7 +30,7 @@ class FavoritesController < ApplicationController
       render json: { error: 'お気に入りが見つかりません' }, status: :not_found
       return
     end
-  
+
     begin
       favorite.destroy!
       render json: { message: 'お気に入りを解除しました' }
@@ -38,5 +38,4 @@ class FavoritesController < ApplicationController
       render json: favorite.errors, status: :unprocessable_entity
     end
   end
-
 end
