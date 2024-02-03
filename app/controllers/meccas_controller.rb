@@ -26,7 +26,8 @@ class MeccasController < ApplicationController
   # 聖地を都道府県からの検索
   def prefecture
     mecca_params = params.permit(:prefecture)
-    meccas = Mecca.where(prefecture: mecca_params[:prefecture])
+    decoded_prefecture = URI.decode_www_form_component(mecca_params[:prefecture])
+    meccas = Mecca.where(prefecture: decoded_prefecture)
     if meccas.any?
       # is_favorites
       meccas_json = meccas.map do |mecca|
