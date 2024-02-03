@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class MeccasController < ApplicationController
-  before_action :jwt_authenticate, only: %i[create update]
+  before_action :jwt_authenticate, only: %i[create update destroy]
 
   #  聖地の詳細表示
   def show
@@ -75,6 +75,7 @@ class MeccasController < ApplicationController
     end
   end
 
+  # 聖地の削除
   def destroy
     mecca_params_id = params.permit(:id)
     mecca = Mecca.find(mecca_params_id[:id])
@@ -93,6 +94,7 @@ class MeccasController < ApplicationController
 
   private
 
+  # ストロングパラメータ
   def mecca_params
     params.require(:mecca).permit(:mecca_name, :anime_id, :title, :episode, :scene, :place_id, :prefecture, :about)
   end
@@ -101,6 +103,7 @@ class MeccasController < ApplicationController
     params.require(:images)
   end
 
+  # 画像の保存処理
   def image_store(mecca, images)
     images.each do |image_file|
       # 保存先のディレクトリを設定
