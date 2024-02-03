@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_01_142831) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_03_082237) do
   create_table "favorites", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "mecca_id", null: false
@@ -31,7 +31,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_01_142831) do
     t.string "title", null: false
     t.integer "episode"
     t.string "scene"
-    t.integer "place_id", null: false
+    t.string "place_id"
     t.string "prefecture", null: false
     t.text "about"
     t.integer "user_id", null: false

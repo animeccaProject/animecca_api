@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class MeccasController < ApplicationController
-  before_action :jwt_authenticate, only: %i[create update]
+  before_action :jwt_authenticate, only: %i[create update destroy]
 
   #  聖地の詳細表示
   def show
@@ -31,6 +31,7 @@ class MeccasController < ApplicationController
     mecca_data = JSON.parse(params[:mecca])
     mecca = Mecca.new(mecca_data)
     mecca.user_id = @user.id
+    puts mecca.user_id
   
     if mecca.valid?
 
@@ -60,8 +61,7 @@ class MeccasController < ApplicationController
 
   # 聖地の編集
   def update
-    mecca_params_id = params.permit(:id)
-    mecca = Mecca.find(mecca_params_id[:id])
+    mecca = Mecca.find_by(id: params[:id])
     # 投稿者本人かどうかの確認を追加
     if mecca.user_id != @user.id
       render json: { error: '投稿者本人以外は編集できません' }, status: :unauthorized
@@ -75,10 +75,9 @@ class MeccasController < ApplicationController
     end
   end
 
+  # 聖地の削除
   def destroy
-    mecca_params_id = params.permit(:id)
-    mecca = Mecca.find(mecca_params_id[:id])
-    # 投稿者本人かどうかの確認を追加
+    mecca = Mecca.find_by(id: params[:id])
     if mecca.user_id != @user.id
       render json: { error: '投稿者本人以外は削除できません' }, status: :unauthorized
       return
