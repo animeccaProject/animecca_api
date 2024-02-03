@@ -7,6 +7,12 @@ class ApplicationController < ActionController::API
 
   def jwt_authenticate
     auth_header = request.headers['Authorization']
+
+    if auth_header.nil?
+      @user = nil
+      return
+    end
+
     token = auth_header.split(' ')[1]
     begin
       decoded_token = JWT.decode(token, Rails.application.credentials.secret_key_base)

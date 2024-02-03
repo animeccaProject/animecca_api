@@ -12,5 +12,6 @@ class Mecca < ApplicationRecord
   has_many :users, through: :favorites
 
   has_many :images, dependent: :destroy
+  attr_accessor :is_author
 
 end
