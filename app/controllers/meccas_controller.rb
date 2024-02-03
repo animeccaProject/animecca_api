@@ -85,7 +85,7 @@ class MeccasController < ApplicationController
     end
 
     if mecca.destroy
-      render json: mecca
+      render json: { message: '聖地を削除しました' }
     else
       render json: mecca.errors, status: :unprocessable_entity
     end
