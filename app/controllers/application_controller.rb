@@ -16,6 +16,7 @@ class ApplicationController < ActionController::API
       # @userがうまくいかない場合は下記のメモを参照
       @user = User.find(user_id)
     rescue StandardError
+      
       @user = nil
     end
   end
