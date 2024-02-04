@@ -8,12 +8,14 @@ class MeccasController < ApplicationController
     mecca = Mecca.find(mecca_params_id[:id])
 
     if mecca.present?
-      is_favorites = @user.present? && @user.favorites.find_by(mecca_id: mecca.id).present?
+      is_favorites = @user.present? && @user.favorites.exists?(mecca_id: mecca.id)
+      username = mecca.user.username
       # 投稿者本人かどうかの確認を追加
       is_author = @user.present? && mecca.user_id == @user.id
       mecca_json = mecca.as_json.merge({
-                                         is_favorites:,
-                                         is_author:,
+                                         username: username, 
+                                         is_favorites: is_favorites,
+                                         is_author: is_author,
                                          images: mecca.images.as_json # 画像情報を含める
                                        })
 
@@ -29,10 +31,11 @@ class MeccasController < ApplicationController
     decoded_prefecture = URI.decode_www_form_component(mecca_params[:prefecture])
     meccas = Mecca.where(prefecture: decoded_prefecture)
     if meccas.any?
-      # is_favorites
       meccas_json = meccas.map do |mecca|
         is_favorites = @user.present? && @user.favorites.find_by(mecca_id: mecca.id).present?
+        username = mecca.user.username
         mecca.as_json.merge({
+                              username: username,
                               is_favorites:,
                               images: mecca.images.as_json # 画像情報を含める
                             })
@@ -61,10 +64,11 @@ class MeccasController < ApplicationController
         end
       end
 
-      if mecca.save
+      begin
+        mecca.save
         render json: mecca, include: :images, status: :created
-      else
-        render json: mecca.errors, status: :unprocessable_entity
+      rescue StandardError => e
+        render json: { error: e.message }, status: :unprocessable_entity
       end
 
     else
@@ -82,8 +86,13 @@ class MeccasController < ApplicationController
       return
     end
 
-    if mecca.update(mecca_params)
-      render json: mecca
+    if mecca.present? && mecca.valid?
+      begin
+        mecca.update(mecca_params)
+        render json: mecca
+      rescue StandardError => e
+        render json: { error: e.message }, status: :unprocessable_entityq
+      end
     else
       render json: mecca.errors, status: :unprocessable_entity
     end
